@@ -1,0 +1,22 @@
+{
+    
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "OpenOCD",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build_Meteor_Accelerometr/Meteor_Accelerometr.elf",
+            "svdFile": "${workspaceFolder}/STM32F401.svd",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "openocd",
+            //"showDevDebugOutput": "raw",
+            "configFiles": [
+                "${workspaceFolder}/stlink.cfg",
+                "${workspaceFolder}/stm32f4x.cfg"
+            ],
+            "preLaunchTask": "Build"
+        }
+    ]
+}
