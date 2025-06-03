@@ -110,6 +110,10 @@ void mpu6050_init()
         asm("NOP");
     }
 }
+
+
+
+
 //#define BLINK_PERIOD_RS485
 // void bsp_sys_tick_1k_callback()
 // {
