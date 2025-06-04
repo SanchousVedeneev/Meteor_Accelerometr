@@ -1,14 +1,6 @@
 
 #include "BSP.h"
-
-//-------------------------------
 #include "usart.h"
-
-//-------------------------------
-
-// ------------------------------ DBG MCU ------------------------------
-
-// ------------------------------ DBG MCU END ------------------------------
 
 // ------------------------------ RS485 ------------------------------
 #define BSP_RS485_1 huart1
@@ -158,4 +150,38 @@ void BSP_RS485_1_IRQ_HANDLER(void)
 }
 
 // ------------------------------ RS485 END ------------------------------
+
+
+//-------------------------------- I2C --------------------------------//
+
+#define MAX_I2C_TIMEOUT (1000)
+void bsp_i2c_write_one_reg(I2C_HandleTypeDef *hic2, uint8_t device_adr, uint8_t memory_adr, uint8_t *buf_write)
+{
+  if (HAL_I2C_Mem_Write(hic2, device_adr, memory_adr, 1,  buf_write, 1, MAX_I2C_TIMEOUT) == HAL_OK)
+  {
+    BSP_LED_TOGGLE(LED2);
+  }
+  return;
+}
+
+void bsp_i2c_read_one_reg (I2C_HandleTypeDef *hic2, uint8_t device_adr, uint8_t memory_adr, uint8_t *buf_read)
+{
+  if (HAL_I2C_Mem_Read(hic2, device_adr, memory_adr, 1, buf_read, 1, MAX_I2C_TIMEOUT) == HAL_OK)
+  {
+    BSP_LED_TOGGLE(LED2);
+  }
+  return;
+}
+
+void bsp_i2c_read_few_reg (I2C_HandleTypeDef *hic2, uint8_t device_adr, uint8_t memory_adr, uint8_t *buf_read, uint8_t size)
+{
+  if (HAL_I2C_Mem_Read(hic2, device_adr, memory_adr, 1, buf_read, size, MAX_I2C_TIMEOUT) == HAL_OK)
+  {
+    BSP_LED_TOGGLE(LED2);
+  }
+  return;
+}
+
+//------------------------------ I2C END ------------------------------//
+
 

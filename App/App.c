@@ -1,126 +1,67 @@
 #include "App.h"
 
 #include "i2c.h"
-// #include "usart.h"
-#define MPU6050_ADDRESS (0x68 << 1) // смещать на 1 бит влево обязательно!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-uint8_t buf_i2c[30] = {0};
-uint16_t adress_i2c = 0x43;
-uint16_t size_i2c_recive = 2;
-uint32_t timeout_i2c = 10000;
-uint8_t data_test[2] = {0x19, 0x07};
 
 #include "ProtocolMbRtuSlaveCtrl.h"
+
+app_typedef App;
+
+extern LSM6DS3TR_typedef LSM6DS3TR;
+extern MPU6050_typedef   MPU6050;
 
 void app_main()
 {
     protocolMbRtuSlaveCtrl_init(1);
-    // mpu6050_init();
+    app_SetupParam_init();
+    LSM6DS3TR_init_struct();
+    LSM6DS3TR_config();
+    MPU6050_init_struct();
+    MPU6050_config();
     while (1)
     {
-        // if (HAL_GPIO_ReadPin(USER_BUTTON_GPIO_Port, USER_BUTTON_Pin))
-        // {
-        //     BSP_LED_ON(BSP_LED_1);
-        // }
-        // else
-        // {
-        //     BSP_LED_OFF(BSP_LED_1);
-        // }
-        // BSP_LED_TOGGLE(BSP_LED_1);
-        HAL_Delay(100);
+        HAL_Delay(5);
+        app_get_accelerometr_data_LSM6DS3TR();
+        app_get_accelerometr_data_MPU6050();
         protocolMbRtuSlaveCtrl_update_tables();
-        // BSP_LED_TOGGLE(LED2);
-        bsp_rs485_sendTestBlock(1);
-        if (HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDRESS, adress_i2c, 1, &buf_i2c[0], 2, timeout_i2c) == HAL_OK)
-        {
-            //BSP_LED_TOGGLE(BSP_LED_1);
-            //BSP_LED_ON(BSP_LED_1);
-        }
-        else
-        {
-            //BSP_LED_OFF(BSP_LED_1);
-        }
-
     }
-
 }
 
-
-#define PWR_MGMT_1_REG (0x6B)
-#define SMPLRT_DIV_REG (0x19)
-#define ACCEL_CONFIG_REG (0x1B)
-#define GYRO_CONFIG_REG (0x1C)
-#define INT_ENABLE_REG (0x38)
-
-void mpu6050_init()
+void app_SetupParam_init()
 {
-    uint8_t data;
-
-    data = 0x00;
-
-    if (HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDRESS, PWR_MGMT_1_REG, I2C_MEMADD_SIZE_8BIT, &data, 1, timeout_i2c) == HAL_OK)
-    {
-        asm("NOP");
-    }
-    else
-    {
-        asm("NOP");
-    }
-
-    HAL_Delay(10);
-
-    data = 0x07;
-    if (HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDRESS, SMPLRT_DIV_REG, 1, &data, 1, timeout_i2c) == HAL_OK)
-    {
-        asm("NOP");
-    }
-    else
-    {
-        asm("NOP");
-    }
-    HAL_Delay(10);
-    data = 0x18;
-    if (HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDRESS, ACCEL_CONFIG_REG, 1, &data, 1, timeout_i2c) == HAL_OK)
-    {
-        asm("NOP");
-    }
-    else
-    {
-        asm("NOP");
-    }
-    HAL_Delay(10);
-
-    data = 0x18;
-    if (HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDRESS, GYRO_CONFIG_REG, 1, &data, 1, timeout_i2c) == HAL_OK)
-    {
-        asm("NOP");
-    }
-    else
-    {
-        asm("NOP");
-    }
-    HAL_Delay(10);
-    data = 0x1;
-    if  (HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDRESS, INT_ENABLE_REG, 1, &data, 1, timeout_i2c) == HAL_OK)
-    {
-        asm("NOP");
-    }
-    else
-    {
-        asm("NOP");
-    }
+    /* @brief information
+    ** accelerometr_scale =  2: +- 2g
+    ** accelerometr_scale =  4: +- 4g
+    ** accelerometr_scale =  8: +- 8g
+    ** accelerometr_scale = 16: +- 16g
+    */
+    App.SetupParam.MPU6050_accelerometr_scale = 4;
+    App.SetupParam.LSM6DS3TR_accelerometr_scale = 4;
 }
 
+#define COUNT_BYTE_ACCELEROMETR_DATA_X_Y_Z (8)
+void app_get_accelerometr_data_LSM6DS3TR()
+{
+    LSM6DS3TR_i2c_read_reg(LSM6DS3TR.reg_data_address.OUTX_L_XL,  (uint8_t*)LSM6DS3TR.i2c_conf.buf, COUNT_BYTE_ACCELEROMETR_DATA_X_Y_Z);
 
+    App.acc_data.LSM6DS3TR_aX = (int16_t)(((float)(int16_t)(LSM6DS3TR.i2c_conf.buf[0] | (LSM6DS3TR.i2c_conf.buf[1] << 8)))/LSM6DS3TR.accelerometr_scale_k);
 
+    App.acc_data.LSM6DS3TR_aY = (int16_t)(((float)(int16_t)(LSM6DS3TR.i2c_conf.buf[2] | (LSM6DS3TR.i2c_conf.buf[3] << 8)))/LSM6DS3TR.accelerometr_scale_k);
 
-//#define BLINK_PERIOD_RS485
-// void bsp_sys_tick_1k_callback()
-// {
+    App.acc_data.LSM6DS3TR_aZ = (int16_t)(((float)(int16_t)(LSM6DS3TR.i2c_conf.buf[4] | (LSM6DS3TR.i2c_conf.buf[5] << 8)))/LSM6DS3TR.accelerometr_scale_k);
 
-//     //static int led485counter = 0;
-//     protocolMbRtuSlaveCtrl_update_tables();
-//     //BSP_LED_TOGGLE(BSP_LED_RS485);
-//     asm("NOP");
-// }
+    return;
+}
 
+void app_get_accelerometr_data_MPU6050()
+{
+
+    MPU6050_i2c_read_reg(MPU6050.reg_data_address.ACCEL_XOUT_H, (uint8_t*)MPU6050.i2c_conf.buf, COUNT_BYTE_ACCELEROMETR_DATA_X_Y_Z);
+
+    App.acc_data.MPU6050_aX = (int16_t)(((float)(int16_t)(MPU6050.i2c_conf.buf[1] | (MPU6050.i2c_conf.buf[0] << 8)))/MPU6050.accelerometr_scale_k);
+
+    App.acc_data.MPU6050_aY = (int16_t)(((float)(int16_t)(MPU6050.i2c_conf.buf[3] | (MPU6050.i2c_conf.buf[2] << 8)))/MPU6050.accelerometr_scale_k);
+
+    App.acc_data.MPU6050_aZ = (int16_t)(((float)(int16_t)(MPU6050.i2c_conf.buf[5] | (MPU6050.i2c_conf.buf[4] << 8)))/MPU6050.accelerometr_scale_k);
+
+    return;
+}

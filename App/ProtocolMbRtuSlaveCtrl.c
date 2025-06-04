@@ -7,27 +7,23 @@ uint8_t modbusBufRxTxRtu485[MODBUS_SS_BUF_CNT];
 
 //--------------------  PROTOCOL ---------------------//
 //---1000
-#define MDB_TABLE_BSP_REG_NO (1001)
-#define MDB_TABLE_BSP_COUNT (100)
+#define MDB_TABLE_ACCELEROMETR_DATA_REG_NO (1)
+#define MDB_TABLE_ACCELEROMETR_DATA_COUNT (6)
 enum mdb_table_bsp
 {
-  mdb_table_bsp_1 = MDB_TABLE_BSP_REG_NO,
-  mdb_table_bsp_2,
-  mdb_table_bsp_3,
-  mdb_table_bsp_4,
-  mdb_table_bsp_5,
-  mdb_table_bsp_6,
-  mdb_table_bsp_7,
-  mdb_table_bsp_8,
-  mdb_table_bsp_9,
-  mdb_table_bsp_10,
+  mdb_table_acc_data_MPU6050_aX = MDB_TABLE_ACCELEROMETR_DATA_REG_NO,
+  mdb_table_acc_data_MPU6050_aY,
+  mdb_table_acc_data_MPU6050_aZ,
+  mdb_table_acc_data_LSM6DS3TR_aX,
+  mdb_table_acc_data_LSM6DS3TR_aY,
+  mdb_table_acc_data_LSM6DS3TR_aZ
 };
 
-uint16_t mmdb_table_bsp_buf[mdb_table_bsp_10 - mdb_table_bsp_1 + 1];
+uint16_t mmdb_table_bsp_buf[mdb_table_acc_data_LSM6DS3TR_aZ - mdb_table_acc_data_MPU6050_aX + 1];
 ModbusSS_table_t mdb_table_bsp = {
     .buf = (uint8_t *)mmdb_table_bsp_buf,
-    .quantity = MDB_TABLE_BSP_COUNT,
-    .regNo = MDB_TABLE_BSP_REG_NO,
+    .quantity = MDB_TABLE_ACCELEROMETR_DATA_COUNT,
+    .regNo = MDB_TABLE_ACCELEROMETR_DATA_REG_NO,
     .type = ModbusSS_Holding};
 
 //--------------------  PROTOCOL END---------------------//
@@ -52,7 +48,7 @@ protocolMbRtuSlaveCtrl_typedef modbusRtu_ctrlStruct; // protocol control struct
 //--------------------  MODBUS STRUCT END---------------------//
 
 //------------------------ EXTERN ------------------------
-
+extern app_typedef App;
 //------------------------ EXTERN END------------------------
 
 //------------------------ REGULAR FCN ------------------------
@@ -73,16 +69,12 @@ void protocolMbRtuSlaveCtrl_init(uint8_t portNo)
 void protocolMbRtuSlaveCtrl_update_tables()
 {
 
-  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_bsp_1,    1);
-  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_bsp_2,    2);
-  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_bsp_3,    3);
-  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_bsp_4,    4);
-  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_bsp_5,    5);
-  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_bsp_6,    6);
-  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_bsp_7,    7);
-  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_bsp_8,    8);     
-  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_bsp_9,    9);
-
+  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_MPU6050_aX,     App.acc_data.LSM6DS3TR_aX);
+  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_MPU6050_aY,     App.acc_data.LSM6DS3TR_aY);
+  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_MPU6050_aZ,     App.acc_data.LSM6DS3TR_aZ);
+  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_LSM6DS3TR_aX,   App.acc_data.MPU6050_aX);
+  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_LSM6DS3TR_aY,   App.acc_data.MPU6050_aY);
+  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_LSM6DS3TR_aZ,   App.acc_data.MPU6050_aZ);
   asm("NOP");
 }
 //------------------------ REGULAR FCN END------------------------

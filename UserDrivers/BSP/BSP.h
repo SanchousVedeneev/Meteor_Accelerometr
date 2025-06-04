@@ -26,7 +26,21 @@ void bsp_rs485_callback_rxTimeout(uint8_t portNo);
 #define BSP_RS485_1_IRQ_HANDLER 			        USART1_IRQHandler
 // #define BSP_RS485_1_IRQ_HANDLER_DMA_RX 			DMA1_Channel3_IRQHandler
 // #define BSP_RS485_1_IRQ_HANDLER_DMA_TX 			DMA1_Channel4_IRQHandler
-
 // ----------------------------- RS-485 END-----------------------------
+
+
+#define MAX_BUF_I2C (20)
+typedef struct
+{
+    I2C_HandleTypeDef *i2c;
+    uint8_t address;
+    uint8_t buf[MAX_BUF_I2C];
+} i2c_conf_typedef;
+
+
+void bsp_i2c_write_one_reg(I2C_HandleTypeDef *hic2, uint8_t device_adr, uint8_t memory_adr, uint8_t *buf_write);
+void bsp_i2c_read_one_reg (I2C_HandleTypeDef *hic2, uint8_t device_adr, uint8_t memory_adr, uint8_t *buf_read);
+void bsp_i2c_read_few_reg (I2C_HandleTypeDef *hic2, uint8_t device_adr, uint8_t memory_adr, uint8_t *buf_read, uint8_t size);
+
 
 #endif
