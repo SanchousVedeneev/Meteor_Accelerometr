@@ -24,6 +24,7 @@ void app_main()
     MPU6050_config();
     while (1)
     {
+        static uint8_t count = 0;
         HAL_Delay(40);
 
         app_get_accelerometr_data_LSM6DS3TR();
@@ -33,6 +34,13 @@ void app_main()
         app_accelerometr_data_filter();
 
         protocolMbRtuSlaveCtrl_update_tables();
+        // if (count++ > 100)
+        // {
+        //     LSM6DS3TR_init_struct();
+        //     LSM6DS3TR_config();
+        //     MPU6050_init_struct();
+        //     MPU6050_config();
+        // }
     }
 }
 
