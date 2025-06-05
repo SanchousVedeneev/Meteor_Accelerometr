@@ -12,7 +12,7 @@ extern app_typedef App;
 void MPU6050_init_struct()
 {
     //------------------------ i2c_conf ------------------------//
-    MPU6050.i2c_conf.i2c = &hi2c3;
+    MPU6050.i2c_conf.i2c     = &hi2c3;
     MPU6050.i2c_conf.address = (0x68 << 1);
     for(uint8_t i = 0; i < MAX_BUF_I2C; i++)
     {
@@ -30,6 +30,11 @@ void MPU6050_init_struct()
     //------------------ reg_data_address END ------------------//
 
     //------------------------ SMPRT_DIV ------------------------//
+    /* @brief information
+    ** SMPLRT_DIV_0...SMPLRT_DIV_7 - Делитель частоты дискретизации. Default value:
+    **      Частота дескритизации = 8 кГц / (1 + SMPLRT_DIV_0...SMPLRT_DIV_7)
+    **      Частота дескритизации = 8 кГц / (1 + 7) = 1 кГц (не менять!!!)
+    */
     MPU6050.reg_conf.SMPRT_DIV.address = 0x19;
     MPU6050.reg_conf.SMPRT_DIV.reg_data.bits.SMPLRT_DIV_0  = BIT_SET;
     MPU6050.reg_conf.SMPRT_DIV.reg_data.bits.SMPLRT_DIV_1  = BIT_SET;
@@ -42,6 +47,18 @@ void MPU6050_init_struct()
     //---------------------- SMPRT_DIV END ----------------------//
 
     //------------------------ CONFIG ------------------------//
+    /* @brief information
+    ** DLPF_CFG_0...DLPF_CFG_2 - Цифровой фильтр низких частот,
+    **      000 - частота пропускания 260 Гц, задержка 0 мс
+    **      001 - 184 Гц,  2.0 мс
+    **      010 -  94 Гц,  3.0 мс
+    **      011 -  44 Гц,  4.9 мс
+    **      100 -  21 Гц,  8.5 мс
+    **      101 -  10 Гц, 13.8 мс
+    **      110 -   5 Гц, 19.0 мс
+    **      111 - RESERVED
+    ** EXT_SYNC_SET - IN DATASHEET (нам не нужно)
+    */
     MPU6050.reg_conf.CONFIG.address = 0x1A;
     MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0      = BIT_RESET;
     MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1      = BIT_RESET;
@@ -54,6 +71,14 @@ void MPU6050_init_struct()
     //---------------------- CONFIG END ----------------------//
 
     //------------------------ ACCEL_CONFIG ------------------------//
+    /* @brief information
+    ** ZA_ST, YA_ST, XA_ST - самопроверки для осей акселерометра (нас не интересует)
+    ** AFS_SEL1...AFS_SEL0 - выбор диапазона шкалы акселерометра
+    **      00:  +- 2g
+    **      01:  +- 4g
+    **      10:  +- 8g
+    **      11: +- 16g
+    */
     MPU6050.reg_conf.ACCEL_CONFIG.address = 0x1C;
     MPU6050.reg_conf.ACCEL_CONFIG.reg_data.bits.NC0      = BIT_RESET;
     MPU6050.reg_conf.ACCEL_CONFIG.reg_data.bits.NC1      = BIT_RESET;
@@ -89,7 +114,6 @@ void MPU6050_init_struct()
     MPU6050.reg_conf.ACCEL_CONFIG.reg_data.bits.YA_ST    = BIT_RESET;
     MPU6050.reg_conf.ACCEL_CONFIG.reg_data.bits.XA_ST    = BIT_RESET;
     //---------------------- ACCEL_CONFIG END ----------------------//
-
     asm("Nop");
 
     //---------------------- accelerometr_scale_k ----------------------//

@@ -9,43 +9,56 @@
 
 void app_main();
 
+#define ACCELEROMETR_COUNT (2)
+#define ACCELEROMETR_AXIS  (3)
+typedef enum
+{
+    LSM6DS3TR_aX = 0,
+    LSM6DS3TR_aY,
+    LSM6DS3TR_aZ,
+    MPU6050_aX,
+    MPU6050_aY,
+    MPU6050_aZ
+} Acceleromentr_enum;
+
 typedef struct
 {
     uint8_t MPU6050_accelerometr_scale;
     uint8_t LSM6DS3TR_accelerometr_scale;
+
+    uint8_t order[ACCELEROMETR_COUNT*ACCELEROMETR_AXIS];
+    uint8_t filterN[ACCELEROMETR_COUNT*ACCELEROMETR_AXIS];
 } SetupParam_typedef;
 
-typedef struct
-{
-    /* @brief information
-    ** acceleronetr data [g*1000]
-    */
-    int16_t MPU6050_aX; 
-    int16_t MPU6050_aY;
-    int16_t MPU6050_aZ;
-
-    int16_t LSM6DS3TR_aX;
-    int16_t LSM6DS3TR_aY;
-    int16_t LSM6DS3TR_aZ;
-} Acceleromentr_data_typedef;
+#define ACCELEROMETR_MAX_FILTER_ORDER (10)
+typedef struct {
+    float value;
+    float value_last;
+    float valueRaw;
+    float valueSours;
+    float buf[ACCELEROMETR_MAX_FILTER_ORDER];
+    uint8_t bufIdx;
+    uint8_t filter_N;
+    uint8_t order;
+}Acceleromentr_filter_typedef;
 
 typedef struct
 {
     SetupParam_typedef SetupParam;
-    Acceleromentr_data_typedef acc_data;
+    int16_t acc_data[ACCELEROMETR_COUNT*ACCELEROMETR_AXIS]; //[g*1000]
+    Acceleromentr_filter_typedef acc_filter[ACCELEROMETR_COUNT*ACCELEROMETR_AXIS];
 } app_typedef;
 
 void app_main();
 
 void app_SetupParam_init();
 
+void app_acc_filter_init();
+
 void app_get_accelerometr_data_LSM6DS3TR();
 
 void app_get_accelerometr_data_MPU6050();
 
-
-
-
-
+void app_accelerometr_data_filter();
 
 #endif

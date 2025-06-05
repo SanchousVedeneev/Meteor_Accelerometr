@@ -4,12 +4,6 @@
 #include "main.h"
 #include "BSP.h"
 
-// enum
-// {
-//     bit_reset = 0,
-//     bit_set   = 1
-// } LSM6DS3TR_bit_state;
-
 typedef struct
 {
     uint8_t address;
@@ -72,6 +66,34 @@ typedef struct
 
 typedef struct
 {
+    uint8_t address;
+    union
+    {
+        uint8_t w8;
+        struct 
+        {
+            uint8_t LOW_PASS_ON_6D  : 1; // 0 bit
+            uint8_t NC1             : 1; // 1 bit
+            uint8_t HP_SLOPE_XL_EN  : 1; // 2 bit
+            uint8_t INPUT_COMPOSITE : 1; // 3 bit
+            uint8_t HP_REF_MODE     : 1; // 4 bit
+            uint8_t HPCH_XL0        : 1; // 5 bit
+            uint8_t HPCH_XL1        : 1; // 6 bit
+            uint8_t LPF2_XL_EN      : 1; // 7 bit
+        }bits;
+    } reg_data;
+} CTRL8_XL_reg_typedef;
+
+typedef struct
+{
+    CTRL1_XL_reg_typedef   CTRL1_XL;
+    CTRL8_XL_reg_typedef   CTRL8_XL;
+    INT1_CNTRL_reg_typedef INT1_CTRL;
+    INT2_CNTRL_reg_typedef INT2_CTRL;
+} reg_conf_LSM6DS3TR_typedef;
+
+typedef struct
+{
     uint8_t OUTX_L_XL;
     uint8_t OUTX_H_XL;
     uint8_t OUTY_L_XL;
@@ -82,15 +104,8 @@ typedef struct
 
 typedef struct
 {
-    CTRL1_XL_reg_typedef   CTRL1_XL;
-    INT1_CNTRL_reg_typedef INT1_CTRL;
-    INT2_CNTRL_reg_typedef INT2_CTRL;
-} reg_LSM6DS3TR_typedef;
-
-typedef struct
-{
     float accelerometr_scale_k;
-    reg_LSM6DS3TR_typedef reg_conf;
+    reg_conf_LSM6DS3TR_typedef reg_conf;
     i2c_conf_typedef i2c_conf;
     reg_data_address_LSM6DS3TR_typedef reg_data_address;
 } LSM6DS3TR_typedef;

@@ -69,13 +69,13 @@ void protocolMbRtuSlaveCtrl_init(uint8_t portNo)
 void protocolMbRtuSlaveCtrl_update_tables()
 {
 
-  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_MPU6050_aX,     App.acc_data.LSM6DS3TR_aX);
-  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_MPU6050_aY,     App.acc_data.LSM6DS3TR_aY);
-  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_MPU6050_aZ,     App.acc_data.LSM6DS3TR_aZ);
-  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_LSM6DS3TR_aX,   App.acc_data.MPU6050_aX);
-  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_LSM6DS3TR_aY,   App.acc_data.MPU6050_aY);
-  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_LSM6DS3TR_aZ,   App.acc_data.MPU6050_aZ);
-  asm("NOP");
+  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_MPU6050_aX,     App.acc_data[LSM6DS3TR_aX]);
+  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_MPU6050_aY,     App.acc_data[LSM6DS3TR_aY]);
+  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_MPU6050_aZ,     App.acc_data[LSM6DS3TR_aZ]);
+  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_LSM6DS3TR_aX,   App.acc_data[MPU6050_aX]);
+  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_LSM6DS3TR_aY,   App.acc_data[MPU6050_aY]);
+  ModbusSS_SetWord(&mdb_table_bsp, mdb_table_acc_data_LSM6DS3TR_aZ,   App.acc_data[MPU6050_aZ]);
+  return;
 }
 //------------------------ REGULAR FCN END------------------------
 
