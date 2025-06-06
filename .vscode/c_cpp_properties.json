@@ -10,7 +10,8 @@
                 "${workspaceFolder}",
                 "${workspaceFolder}/App",
                 "${workspaceFolder}/UserDrivers/ModbusSS",
-                "${workspaceFolder}/UserDrivers/BSP"
+                "${workspaceFolder}/UserDrivers/BSP",
+                "${workspaceFolder}/UserDrivers/Flash_driver"
             ],
             "defines": [
                 "STM32F401xC",

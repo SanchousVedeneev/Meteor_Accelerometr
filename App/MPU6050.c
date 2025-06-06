@@ -60,9 +60,56 @@ void MPU6050_init_struct()
     ** EXT_SYNC_SET - IN DATASHEET (нам не нужно)
     */
     MPU6050.reg_conf.CONFIG.address = 0x1A;
-    MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0      = BIT_RESET;
-    MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1      = BIT_RESET;
-    MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_2      = BIT_SET;
+
+    if (App.SetupParam.MPU6050_frequency == 0)
+    {
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0 = BIT_RESET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1 = BIT_RESET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_2 = BIT_RESET;
+    }
+    else if (App.SetupParam.MPU6050_frequency == 1)
+    {
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0 = BIT_SET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1 = BIT_RESET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_2 = BIT_RESET;
+    }
+    else if (App.SetupParam.MPU6050_frequency == 2)
+    {
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0 = BIT_RESET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1 = BIT_SET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_2 = BIT_RESET;
+    }
+    else if (App.SetupParam.MPU6050_frequency == 3)
+    {
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0 = BIT_SET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1 = BIT_SET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_2 = BIT_RESET;
+    }
+    else if (App.SetupParam.MPU6050_frequency == 4)
+    {
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0 = BIT_RESET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1 = BIT_RESET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_2 = BIT_SET;
+    }
+    else if (App.SetupParam.MPU6050_frequency == 5)
+    {
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0 = BIT_SET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1 = BIT_RESET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_2 = BIT_SET;
+    }
+    else if (App.SetupParam.MPU6050_frequency == 6)
+    {
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0 = BIT_RESET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1 = BIT_SET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_2 = BIT_SET;
+    }
+    else
+    {
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0 = BIT_RESET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1 = BIT_RESET;
+        MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_2 = BIT_SET;
+    }
+    
     MPU6050.reg_conf.CONFIG.reg_data.bits.EXT_SYNC_SET_0  = BIT_RESET;
     MPU6050.reg_conf.CONFIG.reg_data.bits.EXT_SYNC_SET_1  = BIT_RESET;
     MPU6050.reg_conf.CONFIG.reg_data.bits.EXT_SYNC_SET_2  = BIT_RESET;

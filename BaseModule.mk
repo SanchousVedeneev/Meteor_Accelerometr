@@ -2,7 +2,7 @@ include FromCubeMX.mk
 
 HEX_DIR=hex_dir
 
-MODULE_PATHS:= App UserDrivers/ModbusSS UserDrivers/BSP
+MODULE_PATHS:= App UserDrivers/ModbusSS UserDrivers/BSP UserDrivers/Flash_driver
 
 MODULES_C:=$(shell find ${MODULE_PATHS} -type f -name "*.c")
 MODULES_H_DIR:= $(addprefix -I,$(shell find "${MODULE_PATHS}" -type d) ${MODULE_PATHS})

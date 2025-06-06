@@ -86,10 +86,83 @@ void LSM6DS3TR_init_struct()
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL1 = BIT_RESET;
     }
 
-    LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0     = BIT_RESET;
-    LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1     = BIT_SET;
-    LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2     = BIT_RESET;
-    LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3     = BIT_RESET;
+    if (App.SetupParam.LSM6DS3TR_frequency == 1)
+    {
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_SET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_RESET;
+    }
+    else if (App.SetupParam.LSM6DS3TR_frequency == 2)
+    {
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_SET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_RESET;
+    }
+    else if (App.SetupParam.LSM6DS3TR_frequency == 3)
+    {
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_SET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_SET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_RESET;
+    }
+    else if (App.SetupParam.LSM6DS3TR_frequency == 4)
+    {
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_SET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_RESET;
+    }
+    else if (App.SetupParam.LSM6DS3TR_frequency == 5)
+    {
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_SET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_SET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_RESET;
+    }
+    else if (App.SetupParam.LSM6DS3TR_frequency == 6)
+    {
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_SET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_SET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_RESET;
+    }
+    else if (App.SetupParam.LSM6DS3TR_frequency == 7)
+    {
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_SET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_SET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_SET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_RESET;
+    }
+    else if (App.SetupParam.LSM6DS3TR_frequency == 8)
+    {
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_SET;
+    }
+    else if (App.SetupParam.LSM6DS3TR_frequency == 9)
+    {
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_SET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_SET;
+    }
+    else if (App.SetupParam.LSM6DS3TR_frequency == 10)
+    {
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_SET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_SET;
+    }
+    else 
+    {
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_SET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_RESET;
+        LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_RESET;
+    }
     //---------------------- CTRL1_XL END ----------------------//
 
     //------------------------ CTRL8_XL ------------------------//

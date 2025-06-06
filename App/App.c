@@ -10,41 +10,31 @@ extern MPU6050_typedef   MPU6050;
 void app_main()
 {
     protocolMbRtuSlaveCtrl_init(1);
-
     app_SetupParam_init();
-
     app_acc_filter_init();
-
     LSM6DS3TR_init_struct();
+    MPU6050_init_struct();
 
     LSM6DS3TR_config();
-
-    MPU6050_init_struct();
-    
     MPU6050_config();
     while (1)
     {
-        static uint8_t count = 0;
         HAL_Delay(40);
-
         app_get_accelerometr_data_LSM6DS3TR();
-
         app_get_accelerometr_data_MPU6050();
-
         app_accelerometr_data_filter();
 
         protocolMbRtuSlaveCtrl_update_tables();
-        // if (count++ > 100)
-        // {
-        //     LSM6DS3TR_init_struct();
-        //     LSM6DS3TR_config();
-        //     MPU6050_init_struct();
-        //     MPU6050_config();
-        // }
     }
 }
 
 void app_SetupParam_init()
+{
+    app_SetupParam_set_to_defolt();
+
+}
+
+void app_SetupParam_set_to_defolt()
 {
     /* @brief information
     ** accelerometr_scale (int16_t - full range)
@@ -56,6 +46,37 @@ void app_SetupParam_init()
     App.SetupParam.MPU6050_accelerometr_scale   = 4;
     App.SetupParam.LSM6DS3TR_accelerometr_scale = 4;
 
+    /* @brief information
+    ** MPU6050_frequency
+    **      0 - частота пропускания 260 Гц, задержка 0 мс
+    **      1 - 184 Гц,  2.0 мс
+    **      2 -  94 Гц,  3.0 мс
+    **      3 -  44 Гц,  4.9 мс
+    **      4 -  21 Гц,  8.5 мс
+    **      5 -  10 Гц, 13.8 мс
+    **      6 -   5 Гц, 19.0 мс
+    ** LSM6DS3TR_frequency
+    **       0 - Power-down 
+    **       1 - 12.5 Hz (high performance)
+    **       2 - 26   Hz (high performance)
+    **       3 - 52   Hz (high performance)
+    **       4 - 104  Hz (high performance)
+    **       5 - 208  Hz (high performance)
+    **       6 - 416  Hz (high performance)
+    **       7 - 833  Hz (high performance)
+    **       8 - 1660 Hz (high performance)
+    **       9 - 3330 Hz (high performance)
+    **      10 - 6660 Hz (high performance)
+    **      11 - 12,5 Hz (high performance)
+    **      12+ - Not allowed
+    */ 
+    App.SetupParam.MPU6050_frequency   = 4;
+    App.SetupParam.LSM6DS3TR_frequency = 2;
+
+    /* @brief information
+    ** Order - number of cells in the averaging filter buffer
+    ** filterN - aperiodic filter coefficient
+    */
     for (uint8_t i = 0; i < (ACCELEROMETR_COUNT*ACCELEROMETR_AXIS); i++)
     {
         App.SetupParam.order[i]   = 1;
@@ -150,4 +171,19 @@ void app_accelerometr_data_filter()
         App.acc_filter[i].value = App.acc_filter[i].value_last = App.acc_data[i] = value;
     }
     asm("Nop");
+}
+
+void app_flash_load()
+{
+    readFlash(FLASH_ADDRESS_SECTOR_3);
+}
+
+void app_flash_save()
+{
+    write_Flash(FLASH_ADDRESS_SECTOR_3);
+}
+
+void app_system_reset()
+{
+    __NVIC_SystemReset();
 }

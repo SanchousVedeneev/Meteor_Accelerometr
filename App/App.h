@@ -6,6 +6,7 @@
 #include "BSP.h"
 #include "LSM6DS3TR.h"
 #include "MPU6050.h"
+#include "Flash_driver.h"
 
 void app_main();
 
@@ -25,6 +26,9 @@ typedef struct
 {
     uint8_t MPU6050_accelerometr_scale;
     uint8_t LSM6DS3TR_accelerometr_scale;
+
+    uint8_t MPU6050_frequency;
+    uint8_t LSM6DS3TR_frequency;
 
     uint8_t order[ACCELEROMETR_COUNT*ACCELEROMETR_AXIS];
     uint8_t filterN[ACCELEROMETR_COUNT*ACCELEROMETR_AXIS];
@@ -55,10 +59,18 @@ void app_SetupParam_init();
 
 void app_acc_filter_init();
 
+void app_SetupParam_set_to_defolt();
+
 void app_get_accelerometr_data_LSM6DS3TR();
 
 void app_get_accelerometr_data_MPU6050();
 
 void app_accelerometr_data_filter();
+
+void app_flash_load();
+
+void app_flash_save();
+
+void app_system_reset();
 
 #endif
