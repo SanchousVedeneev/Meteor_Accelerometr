@@ -7,51 +7,69 @@ uint8_t modbusBufRxTxRtu485[MODBUS_SS_BUF_CNT];
 
 //--------------------  PROTOCOL ---------------------//
 //---1
-#define MDB_TABLE_ACCELEROMETR_DATA_REG_NO (1)
+#define MDB_TABLE_ACC_REG_NO (1)
 
-enum mdb_table_acc_data
+enum mdb_table_acc
 {
-  mdb_table_acc_data_MPU6050_aX = MDB_TABLE_ACCELEROMETR_DATA_REG_NO,
-  mdb_table_acc_data_MPU6050_aY,
-  mdb_table_acc_data_MPU6050_aZ,
-  mdb_table_acc_data_LSM6DS3TR_aX,
-  mdb_table_acc_data_LSM6DS3TR_aY,
-  mdb_table_acc_data_LSM6DS3TR_aZ
+  mdb_table_acc_LSM6DS3TR_aX = MDB_TABLE_ACC_REG_NO,
+  mdb_table_acc_LSM6DS3TR_aY,
+  mdb_table_acc_LSM6DS3TR_aZ,
+  mdb_table_acc_MPU6050_aX,
+  mdb_table_acc_MPU6050_aY,
+  mdb_table_acc_MPU6050_aZ,
 };
-#define MDB_TABLE_ACCELEROMETR_DATA_COUNT (mdb_table_acc_data_LSM6DS3TR_aZ - mdb_table_acc_data_MPU6050_aX +1)
-uint16_t mdb_table_acc_data_buf[MDB_TABLE_ACCELEROMETR_DATA_COUNT];
-ModbusSS_table_t mdb_table_acc_data = {
-    .buf = (uint8_t *)mdb_table_acc_data_buf,
-    .quantity = MDB_TABLE_ACCELEROMETR_DATA_COUNT,
-    .regNo = MDB_TABLE_ACCELEROMETR_DATA_REG_NO,
+#define MDB_TABLE_ACC_COUNT (mdb_table_acc_MPU6050_aZ - mdb_table_acc_LSM6DS3TR_aX + 1)
+uint16_t mdb_table_acc_buf[MDB_TABLE_ACC_COUNT];
+ModbusSS_table_t mdb_table_acc = {
+    .buf = (uint8_t *)mdb_table_acc_buf,
+    .quantity = MDB_TABLE_ACC_COUNT,
+    .regNo = MDB_TABLE_ACC_REG_NO,
     .type = ModbusSS_Holding};
 
 //---100
-#define MDB_TABLE_SETUP_PARAM_DATA_REG_NO (100)
-enum mdb_table_setup_param
+#define MDB_TABLE_SETUP_REG_NO (100)
+enum mdb_table_setup
 {
-  mdb_table_setup_param_MPU6050_accelerometr_scale = MDB_TABLE_SETUP_PARAM_DATA_REG_NO,
-  mdb_table_setup_param_LSM6DS3TR_accelerometr_scale,
-  mdb_table_setup_param_MPU6050_frequency,
-  mdb_table_setup_param_LSM6DS3TR_frequency,
-  mdb_table_setup_param_order_1 = 104,
-  mdb_table_setup_param_order_8 = 111,
-  mdb_table_setup_param_filterN_1 = 112,
-  mdb_table_setup_param_filterN_8 = 119
+  mdb_table_setup_MPU6050_acc_scale = MDB_TABLE_SETUP_REG_NO,
+  mdb_table_setup_LSM6DS3TR_acc_scale,
+  mdb_table_setup_MPU6050_freq,
+  mdb_table_setup_LSM6DS3TR_freq,
+  mdb_table_setup_order_1 = 104,
+  mdb_table_setup_order_8 = 109,
+  mdb_table_setup_filterN_1 = 110,
+  mdb_table_setup_filterN_8 = 115
 };
-#define MDB_TABLE_SETUP_PARAM_DATA_COUNT (mdb_table_setup_param_filterN_8 - mdb_table_setup_param_MPU6050_accelerometr_scale + 1)
-uint16_t mdb_table_setup_param_buf[MDB_TABLE_SETUP_PARAM_DATA_COUNT];
-ModbusSS_table_t mdb_table_setup_param = {
-    .buf = (uint8_t *)mdb_table_setup_param_buf,
-    .quantity = MDB_TABLE_SETUP_PARAM_DATA_COUNT,
-    .regNo = MDB_TABLE_SETUP_PARAM_DATA_REG_NO,
+#define MDB_TABLE_SETUP_COUNT (mdb_table_setup_filterN_8 - mdb_table_setup_MPU6050_acc_scale + 1)
+uint16_t mdb_table_setup_buf[MDB_TABLE_SETUP_COUNT];
+ModbusSS_table_t mdb_table_setup = {
+    .buf = (uint8_t *)mdb_table_setup_buf,
+    .quantity = MDB_TABLE_SETUP_COUNT,
+    .regNo = MDB_TABLE_SETUP_REG_NO,
     .type = ModbusSS_Holding};
+
+//---200
+#define MDB_TABLE_CONTROL_NO (200)
+enum mdb_table_control
+{
+  mdb_table_control_cmd = MDB_TABLE_CONTROL_NO
+};
+#define MDB_TABLE_CONTROL_COUNT (1)
+uint16_t mdb_table_control_buf[MDB_TABLE_CONTROL_COUNT];
+ModbusSS_table_t mdb_table_control = {
+    .buf = (uint8_t *)mdb_table_control_buf,
+    .quantity = MDB_TABLE_CONTROL_COUNT,
+    .regNo = MDB_TABLE_CONTROL_NO,
+    .type = ModbusSS_Holding};
+
+
+  
 //--------------------  PROTOCOL END---------------------//
 
 //--------------------  TABLES ARRAY ---------------------//
 ModbusSS_table_t *modbusTables[] = {
-    &mdb_table_acc_data,
-    &mdb_table_setup_param_buf,
+    &mdb_table_acc,
+    &mdb_table_setup,
+    &mdb_table_control
 };
 //--------------------  TABLES ARRAY END---------------------//
 
@@ -63,7 +81,7 @@ ModbusSS_t modbusSS_rtu_rs485 = {
     .bufRxTx = modbusBufRxTxRtu485,
     .slaveId = 1,
     .tables = modbusTables,
-    .tablesCount = 2};
+    .tablesCount = 3};
 
 protocolMbRtuSlaveCtrl_typedef modbusRtu_ctrlStruct; // protocol control struct
 //--------------------  MODBUS STRUCT END---------------------//
@@ -90,27 +108,30 @@ void protocolMbRtuSlaveCtrl_init(uint8_t portNo)
 void protocolMbRtuSlaveCtrl_update_tables()
 {
   //1__
-  ModbusSS_SetWord(&mdb_table_acc_data, mdb_table_acc_data_MPU6050_aX,   App.acc_data[MPU6050_aX]);
-  ModbusSS_SetWord(&mdb_table_acc_data, mdb_table_acc_data_MPU6050_aY,   App.acc_data[MPU6050_aY]);
-  ModbusSS_SetWord(&mdb_table_acc_data, mdb_table_acc_data_MPU6050_aZ,   App.acc_data[MPU6050_aZ]);
-  ModbusSS_SetWord(&mdb_table_acc_data, mdb_table_acc_data_LSM6DS3TR_aX, App.acc_data[LSM6DS3TR_aX]);
-  ModbusSS_SetWord(&mdb_table_acc_data, mdb_table_acc_data_LSM6DS3TR_aY, App.acc_data[LSM6DS3TR_aY]);
-  ModbusSS_SetWord(&mdb_table_acc_data, mdb_table_acc_data_LSM6DS3TR_aZ, App.acc_data[LSM6DS3TR_aZ]);
+
+  ModbusSS_SetWord(&mdb_table_acc, mdb_table_acc_LSM6DS3TR_aX, App.acc_data[LSM6DS3TR_aX]);
+  ModbusSS_SetWord(&mdb_table_acc, mdb_table_acc_LSM6DS3TR_aY, App.acc_data[LSM6DS3TR_aY]);
+  ModbusSS_SetWord(&mdb_table_acc, mdb_table_acc_LSM6DS3TR_aZ, App.acc_data[LSM6DS3TR_aZ]);
+  ModbusSS_SetWord(&mdb_table_acc, mdb_table_acc_MPU6050_aX,   App.acc_data[MPU6050_aX]);
+  ModbusSS_SetWord(&mdb_table_acc, mdb_table_acc_MPU6050_aY,   App.acc_data[MPU6050_aY]);
+  ModbusSS_SetWord(&mdb_table_acc, mdb_table_acc_MPU6050_aZ,   App.acc_data[MPU6050_aZ]);
 
   //100__
-  ModbusSS_SetWord(&mdb_table_setup_param, mdb_table_setup_param_MPU6050_accelerometr_scale,   App.SetupParam.MPU6050_accelerometr_scale);
-  ModbusSS_SetWord(&mdb_table_setup_param, mdb_table_setup_param_LSM6DS3TR_accelerometr_scale, App.SetupParam.LSM6DS3TR_accelerometr_scale);
-  ModbusSS_SetWord(&mdb_table_setup_param, mdb_table_setup_param_MPU6050_frequency,            App.SetupParam.MPU6050_frequency);
-  ModbusSS_SetWord(&mdb_table_setup_param, mdb_table_setup_param_LSM6DS3TR_frequency,          App.SetupParam.LSM6DS3TR_frequency);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_MPU6050_acc_scale,   App.SetupParam.MPU6050_acc_scale);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_LSM6DS3TR_acc_scale, App.SetupParam.LSM6DS3TR_acc_scale);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_MPU6050_freq,        App.SetupParam.MPU6050_freq);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_LSM6DS3TR_freq,      App.SetupParam.LSM6DS3TR_freq);
 
-  for (uint8_t i = mdb_table_setup_param_order_1; i <= (mdb_table_setup_param_order_8 - mdb_table_setup_param_order_1); i++)
+  for (uint8_t i = mdb_table_setup_order_1, j = 0; i <= mdb_table_setup_order_8; i++, j++)
   {
-    uint8_t j = 0;
-    ModbusSS_SetWord(&mdb_table_setup_param, i++,   App.SetupParam.order);
+    ModbusSS_SetWord(&mdb_table_setup, i, App.SetupParam.order[j]);
+  }
+
+  for (uint8_t i = mdb_table_setup_filterN_1, j = 0; i <= mdb_table_setup_filterN_8; i++, j++)
+  {
+    ModbusSS_SetWord(&mdb_table_setup, i, App.SetupParam.filterN[j]);
   }
   
-
-
   return;
 }
 //------------------------ REGULAR FCN END------------------------
@@ -127,6 +148,28 @@ __weak void protocolMbRtuSlaveCtrl_callback_H_WRITE(ModbusSS_table_t *table, uin
   // float value = 0.0f;
   // uint8_t idx = 0;
   asm("NOP");
+
+  if (table == &mdb_table_control) // Диапазон PROGRAM
+  {
+    switch (reg)
+    {
+    case mdb_table_control_cmd:
+      modbusRtu_ctrlStruct.cmd = ModbusSS_GetWord(&mdb_table_control, reg);
+      switch (modbusRtu_ctrlStruct.cmd)
+      {
+      case protocol_cmd_save_param:
+        app_flash_save();
+        break;
+      case protocol_cmd_reset:
+        app_system_reset();
+        break;
+      default:
+        break;
+      }
+    default:
+      break;
+    }
+  }
 }
 
 __weak void protocolMbRtuSlaveCtrl_callback_H_READ(ModbusSS_table_t *table, uint16_t reg, uint16_t quantity)

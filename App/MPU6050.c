@@ -61,43 +61,43 @@ void MPU6050_init_struct()
     */
     MPU6050.reg_conf.CONFIG.address = 0x1A;
 
-    if (App.SetupParam.MPU6050_frequency == 0)
+    if (App.SetupParam.MPU6050_freq == 0)
     {
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0 = BIT_RESET;
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1 = BIT_RESET;
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_2 = BIT_RESET;
     }
-    else if (App.SetupParam.MPU6050_frequency == 1)
+    else if (App.SetupParam.MPU6050_freq == 1)
     {
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0 = BIT_SET;
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1 = BIT_RESET;
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_2 = BIT_RESET;
     }
-    else if (App.SetupParam.MPU6050_frequency == 2)
+    else if (App.SetupParam.MPU6050_freq == 2)
     {
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0 = BIT_RESET;
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1 = BIT_SET;
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_2 = BIT_RESET;
     }
-    else if (App.SetupParam.MPU6050_frequency == 3)
+    else if (App.SetupParam.MPU6050_freq == 3)
     {
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0 = BIT_SET;
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1 = BIT_SET;
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_2 = BIT_RESET;
     }
-    else if (App.SetupParam.MPU6050_frequency == 4)
+    else if (App.SetupParam.MPU6050_freq == 4)
     {
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0 = BIT_RESET;
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1 = BIT_RESET;
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_2 = BIT_SET;
     }
-    else if (App.SetupParam.MPU6050_frequency == 5)
+    else if (App.SetupParam.MPU6050_freq == 5)
     {
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0 = BIT_SET;
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1 = BIT_RESET;
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_2 = BIT_SET;
     }
-    else if (App.SetupParam.MPU6050_frequency == 6)
+    else if (App.SetupParam.MPU6050_freq == 6)
     {
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_0 = BIT_RESET;
         MPU6050.reg_conf.CONFIG.reg_data.bits.DLPF_CFG_1 = BIT_SET;
@@ -131,22 +131,22 @@ void MPU6050_init_struct()
     MPU6050.reg_conf.ACCEL_CONFIG.reg_data.bits.NC1      = BIT_RESET;
     MPU6050.reg_conf.ACCEL_CONFIG.reg_data.bits.NC2      = BIT_RESET;
 
-    if (App.SetupParam.MPU6050_accelerometr_scale == 2)
+    if (App.SetupParam.MPU6050_acc_scale == 2)
     {
         MPU6050.reg_conf.ACCEL_CONFIG.reg_data.bits.AFS_SEL0 = BIT_RESET;
         MPU6050.reg_conf.ACCEL_CONFIG.reg_data.bits.AFS_SEL1 = BIT_RESET;
     }
-    else if (App.SetupParam.MPU6050_accelerometr_scale == 4)
+    else if (App.SetupParam.MPU6050_acc_scale == 4)
     {
         MPU6050.reg_conf.ACCEL_CONFIG.reg_data.bits.AFS_SEL0 = BIT_SET;
         MPU6050.reg_conf.ACCEL_CONFIG.reg_data.bits.AFS_SEL1 = BIT_RESET;
     }
-    else if (App.SetupParam.MPU6050_accelerometr_scale == 8)
+    else if (App.SetupParam.MPU6050_acc_scale == 8)
     {
         MPU6050.reg_conf.ACCEL_CONFIG.reg_data.bits.AFS_SEL0 = BIT_RESET;
         MPU6050.reg_conf.ACCEL_CONFIG.reg_data.bits.AFS_SEL1 = BIT_SET;
     }
-    else if (App.SetupParam.MPU6050_accelerometr_scale == 16)
+    else if (App.SetupParam.MPU6050_acc_scale == 16)
     {
         MPU6050.reg_conf.ACCEL_CONFIG.reg_data.bits.AFS_SEL0 = BIT_SET;
         MPU6050.reg_conf.ACCEL_CONFIG.reg_data.bits.AFS_SEL1 = BIT_SET;
@@ -164,19 +164,19 @@ void MPU6050_init_struct()
     asm("Nop");
 
     //---------------------- accelerometr_scale_k ----------------------//
-    if (App.SetupParam.MPU6050_accelerometr_scale == 2)
+    if (App.SetupParam.MPU6050_acc_scale == 2)
     {
         MPU6050.accelerometr_scale_k = 16.384f;
     }
-    else if (App.SetupParam.MPU6050_accelerometr_scale == 4)
+    else if (App.SetupParam.MPU6050_acc_scale == 4)
     {
         MPU6050.accelerometr_scale_k = 8.192f;
     }
-    else if (App.SetupParam.MPU6050_accelerometr_scale == 8)
+    else if (App.SetupParam.MPU6050_acc_scale == 8)
     {
         MPU6050.accelerometr_scale_k = 4.096f;
     }
-    else if (App.SetupParam.MPU6050_accelerometr_scale == 16)
+    else if (App.SetupParam.MPU6050_acc_scale == 16)
     {
         MPU6050.accelerometr_scale_k = 2.048f;
     }

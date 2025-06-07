@@ -20,15 +20,15 @@ typedef enum
     MPU6050_aX,
     MPU6050_aY,
     MPU6050_aZ
-} Acceleromentr_enum;
+} Acc_data_enum;
 
 typedef struct
 {
-    uint8_t MPU6050_accelerometr_scale;
-    uint8_t LSM6DS3TR_accelerometr_scale;
+    uint8_t MPU6050_acc_scale;
+    uint8_t LSM6DS3TR_acc_scale;
 
-    uint8_t MPU6050_frequency;
-    uint8_t LSM6DS3TR_frequency;
+    uint8_t MPU6050_freq;
+    uint8_t LSM6DS3TR_freq;
 
     uint8_t order[ACCELEROMETR_COUNT*ACCELEROMETR_AXIS];
     uint8_t filterN[ACCELEROMETR_COUNT*ACCELEROMETR_AXIS];

@@ -60,22 +60,22 @@ void LSM6DS3TR_init_struct()
     LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.BW0_XL      = BIT_SET;
     LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.LPF1_BW_SEL = BIT_RESET;
 
-    if (App.SetupParam.LSM6DS3TR_accelerometr_scale == 2)
+    if (App.SetupParam.LSM6DS3TR_acc_scale == 2)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL0 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL1 = BIT_RESET;
     }
-    else if (App.SetupParam.LSM6DS3TR_accelerometr_scale == 4)
+    else if (App.SetupParam.LSM6DS3TR_acc_scale == 4)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL0 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL1 = BIT_SET;
     }
-    else if (App.SetupParam.LSM6DS3TR_accelerometr_scale == 8)
+    else if (App.SetupParam.LSM6DS3TR_acc_scale == 8)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL0 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL1 = BIT_SET;
     }
-    else if (App.SetupParam.LSM6DS3TR_accelerometr_scale == 16)
+    else if (App.SetupParam.LSM6DS3TR_acc_scale == 16)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL0 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL1 = BIT_RESET;        
@@ -86,70 +86,70 @@ void LSM6DS3TR_init_struct()
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL1 = BIT_RESET;
     }
 
-    if (App.SetupParam.LSM6DS3TR_frequency == 1)
+    if (App.SetupParam.LSM6DS3TR_freq == 1)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_RESET;
     }
-    else if (App.SetupParam.LSM6DS3TR_frequency == 2)
+    else if (App.SetupParam.LSM6DS3TR_freq == 2)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_RESET;
     }
-    else if (App.SetupParam.LSM6DS3TR_frequency == 3)
+    else if (App.SetupParam.LSM6DS3TR_freq == 3)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_RESET;
     }
-    else if (App.SetupParam.LSM6DS3TR_frequency == 4)
+    else if (App.SetupParam.LSM6DS3TR_freq == 4)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_RESET;
     }
-    else if (App.SetupParam.LSM6DS3TR_frequency == 5)
+    else if (App.SetupParam.LSM6DS3TR_freq == 5)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_RESET;
     }
-    else if (App.SetupParam.LSM6DS3TR_frequency == 6)
+    else if (App.SetupParam.LSM6DS3TR_freq == 6)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_RESET;
     }
-    else if (App.SetupParam.LSM6DS3TR_frequency == 7)
+    else if (App.SetupParam.LSM6DS3TR_freq == 7)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_RESET;
     }
-    else if (App.SetupParam.LSM6DS3TR_frequency == 8)
+    else if (App.SetupParam.LSM6DS3TR_freq == 8)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_SET;
     }
-    else if (App.SetupParam.LSM6DS3TR_frequency == 9)
+    else if (App.SetupParam.LSM6DS3TR_freq == 9)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL2 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL3 = BIT_SET;
     }
-    else if (App.SetupParam.LSM6DS3TR_frequency == 10)
+    else if (App.SetupParam.LSM6DS3TR_freq == 10)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL0 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.ODR_XL1 = BIT_SET;
@@ -183,19 +183,19 @@ void LSM6DS3TR_init_struct()
     asm("Nop");
 
     //---------------------- accelerometr_scale_k ----------------------//
-    if (App.SetupParam.LSM6DS3TR_accelerometr_scale == 2)
+    if (App.SetupParam.LSM6DS3TR_acc_scale == 2)
     {
         LSM6DS3TR.accelerometr_scale_k = 16.384f;
     }
-    else if (App.SetupParam.LSM6DS3TR_accelerometr_scale == 4)
+    else if (App.SetupParam.LSM6DS3TR_acc_scale == 4)
     {
         LSM6DS3TR.accelerometr_scale_k = 8.192f;
     }
-    else if (App.SetupParam.LSM6DS3TR_accelerometr_scale == 8)
+    else if (App.SetupParam.LSM6DS3TR_acc_scale == 8)
     {
         LSM6DS3TR.accelerometr_scale_k = 4.096f;
     }
-    else if (App.SetupParam.LSM6DS3TR_accelerometr_scale == 16)
+    else if (App.SetupParam.LSM6DS3TR_acc_scale == 16)
     {
         LSM6DS3TR.accelerometr_scale_k = 2.048f;
     }

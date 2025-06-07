@@ -7,8 +7,7 @@
 
 
 typedef enum{
-    protocol_cmd_debug = 1,
-    protocol_cmd_save_param,
+    protocol_cmd_save_param =1,
     protocol_cmd_reset
 }protocolMbRtuSlaveCtrl_control_typedef;
 

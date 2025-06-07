@@ -10,8 +10,10 @@ extern MPU6050_typedef   MPU6050;
 void app_main()
 {
     protocolMbRtuSlaveCtrl_init(1);
+
     app_SetupParam_init();
     app_acc_filter_init();
+
     LSM6DS3TR_init_struct();
     MPU6050_init_struct();
 
@@ -23,7 +25,6 @@ void app_main()
         app_get_accelerometr_data_LSM6DS3TR();
         app_get_accelerometr_data_MPU6050();
         app_accelerometr_data_filter();
-
         protocolMbRtuSlaveCtrl_update_tables();
     }
 }
@@ -31,7 +32,7 @@ void app_main()
 void app_SetupParam_init()
 {
     app_SetupParam_set_to_defolt();
-
+    app_flash_load();
 }
 
 void app_SetupParam_set_to_defolt()
@@ -43,8 +44,8 @@ void app_SetupParam_set_to_defolt()
     **       8: +-  8g
     **      16: +- 16g
     */
-    App.SetupParam.MPU6050_accelerometr_scale   = 4;
-    App.SetupParam.LSM6DS3TR_accelerometr_scale = 4;
+    App.SetupParam.MPU6050_acc_scale   = 4;
+    App.SetupParam.LSM6DS3TR_acc_scale = 4;
 
     /* @brief information
     ** MPU6050_frequency
@@ -70,8 +71,8 @@ void app_SetupParam_set_to_defolt()
     **      11 - 12,5 Hz (high performance)
     **      12+ - Not allowed
     */ 
-    App.SetupParam.MPU6050_frequency   = 4;
-    App.SetupParam.LSM6DS3TR_frequency = 2;
+    App.SetupParam.MPU6050_freq   = 4;
+    App.SetupParam.LSM6DS3TR_freq = 2;
 
     /* @brief information
     ** Order - number of cells in the averaging filter buffer
@@ -181,6 +182,7 @@ void app_flash_load()
 void app_flash_save()
 {
     write_Flash(FLASH_ADDRESS_SECTOR_3);
+    app_system_reset();
 }
 
 void app_system_reset()
