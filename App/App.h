@@ -2,7 +2,6 @@
 #define __APP_H__
 
 #include "main.h"
-
 #include "BSP.h"
 #include "LSM6DS3TR.h"
 #include "MPU6050.h"
@@ -59,7 +58,7 @@ void app_SetupParam_init();
 
 void app_acc_filter_init();
 
-void app_SetupParam_set_to_defolt();
+void app_SetupParam_set_defolt();
 
 void app_get_accelerometr_data_LSM6DS3TR();
 

@@ -31,11 +31,11 @@ void app_main()
 
 void app_SetupParam_init()
 {
-    app_SetupParam_set_to_defolt();
+    app_SetupParam_set_defolt();
     app_flash_load();
 }
 
-void app_SetupParam_set_to_defolt()
+void app_SetupParam_set_defolt()
 {
     /* @brief information
     ** accelerometr_scale (int16_t - full range)
@@ -49,7 +49,7 @@ void app_SetupParam_set_to_defolt()
 
     /* @brief information
     ** MPU6050_frequency
-    **      0 - частота пропускания 260 Гц, задержка 0 мс
+    **      0 - 260 Гц, задержка 0 мс
     **      1 - 184 Гц,  2.0 мс
     **      2 -  94 Гц,  3.0 мс
     **      3 -  44 Гц,  4.9 мс
@@ -136,12 +136,17 @@ void app_get_accelerometr_data_MPU6050()
 
 void app_accelerometr_data_filter()
 {
+    float value = 0.0f;
+    float valueLast = 0.0f;
+    float kFilter = 0.0f;        
+    float sum = 0.0f;
+
     for (uint8_t i = 0; i < (ACCELEROMETR_AXIS*ACCELEROMETR_COUNT); i++)
     {
-        float value = 0.0f;
-        float valueLast = 0.0f;
-        float kFilter = 0.0f;
-        float sum = 0.0f;
+        value = 0.0f;
+        valueLast = 0.0f;
+        kFilter = 0.0f;
+        sum = 0.0f;
 
         App.acc_filter[i].buf[App.acc_filter[i].bufIdx++] = App.acc_filter[i].valueSours;
 
@@ -155,7 +160,7 @@ void app_accelerometr_data_filter()
             sum += App.acc_filter[i].buf[idx];
         }
 
-        if ((sum > -1.0f) && (sum < 1.0) )
+        if ((-1.0f < sum) && (sum < 1.0))
         {
             App.acc_filter[i].valueRaw = 0.0f;
         }
@@ -164,7 +169,6 @@ void app_accelerometr_data_filter()
             App.acc_filter[i].valueRaw = sum / App.acc_filter[i].order;
         }
 
-        //--------------------//
         value = App.acc_filter[i].valueRaw;
         valueLast = App.acc_filter[i].value_last;
         kFilter = 2.0f / ((float)App.acc_filter[i].filter_N + 1.0f);

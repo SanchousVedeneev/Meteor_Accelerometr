@@ -163,6 +163,10 @@ __weak void protocolMbRtuSlaveCtrl_callback_H_WRITE(ModbusSS_table_t *table, uin
       case protocol_cmd_reset:
         app_system_reset();
         break;
+      case protocol_cmd_param_set_defolt:
+        app_SetupParam_set_defolt();
+        app_system_reset();
+        break;
       default:
         break;
       }
