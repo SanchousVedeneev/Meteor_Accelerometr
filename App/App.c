@@ -9,8 +9,6 @@ extern MPU6050_typedef   MPU6050;
 
 void app_main()
 {
-    protocolMbRtuSlaveCtrl_init(1);
-
     app_SetupParam_init();
     app_acc_filter_init();
 
@@ -19,12 +17,13 @@ void app_main()
 
     LSM6DS3TR_config();
     MPU6050_config();
+    protocolMbRtuSlaveCtrl_init(1);
     while (1)
     {
         HAL_Delay(40);
-        app_get_accelerometr_data_LSM6DS3TR();
-        app_get_accelerometr_data_MPU6050();
-        app_accelerometr_data_filter();
+        app_get_acc_data_LSM6DS3TR();
+        app_get_acc_data_MPU6050();
+        app_acc_data_filter();
         protocolMbRtuSlaveCtrl_update_tables();
     }
 }
@@ -107,7 +106,7 @@ void app_acc_filter_init()
 }
 
 #define COUNT_BYTE_ACCELEROMETR_DATA_X_Y_Z (8)
-void app_get_accelerometr_data_LSM6DS3TR()
+void app_get_acc_data_LSM6DS3TR()
 {
     LSM6DS3TR_i2c_read_reg(LSM6DS3TR.reg_data_address.OUTX_L_XL, (uint8_t*)LSM6DS3TR.i2c_conf.buf, COUNT_BYTE_ACCELEROMETR_DATA_X_Y_Z);
 
@@ -120,7 +119,7 @@ void app_get_accelerometr_data_LSM6DS3TR()
     return;
 }
 
-void app_get_accelerometr_data_MPU6050()
+void app_get_acc_data_MPU6050()
 {
 
     MPU6050_i2c_read_reg(MPU6050.reg_data_address.ACCEL_XOUT_H, (uint8_t*)MPU6050.i2c_conf.buf, COUNT_BYTE_ACCELEROMETR_DATA_X_Y_Z);
@@ -134,7 +133,7 @@ void app_get_accelerometr_data_MPU6050()
     return;
 }
 
-void app_accelerometr_data_filter()
+void app_acc_data_filter()
 {
     float value = 0.0f;
     float valueLast = 0.0f;
@@ -178,6 +177,63 @@ void app_accelerometr_data_filter()
     asm("Nop");
 }
 
+void app_acc_set_scale_SM6DS3TR(uint16_t value)
+{
+    if ((value >= 2) || (value < 16))
+    {
+        App.SetupParam.LSM6DS3TR_acc_scale = value;
+    }
+    else 
+    {
+        // Неверное значение
+        asm("Nop");
+    }
+    return;
+}
+
+void app_acc_set_scale_MPU6050(uint16_t value)
+{
+    if ((value >= 2) || (value <= 16))
+    {
+        App.SetupParam.MPU6050_acc_scale = value;
+    }
+    else 
+    {
+        // Неверное значение
+        asm("Nop");
+    }
+    return;
+}
+
+void app_acc_set_freq_SM6DS3TR(uint16_t value)
+{
+    if ((value >= 1) || (value <= 11))
+    {
+        App.SetupParam.LSM6DS3TR_freq = value;
+    }
+    else
+    {
+        // Неверное значение
+        asm("Nop");
+    }
+    return;
+}
+
+void app_acc_set_freq_MPU6050(uint16_t value)
+{
+    if ((value >= 0) || (value <= 6))
+    {
+        App.SetupParam.MPU6050_freq = value;
+    }
+    else
+    {
+        // Неверное значение
+        asm("Nop");
+    }
+    return;
+
+}
+
 void app_flash_load()
 {
     readFlash(FLASH_ADDRESS_SECTOR_3);
@@ -186,7 +242,6 @@ void app_flash_load()
 void app_flash_save()
 {
     write_Flash(FLASH_ADDRESS_SECTOR_3);
-    app_system_reset();
 }
 
 void app_system_reset()

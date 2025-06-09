@@ -60,11 +60,19 @@ void app_acc_filter_init();
 
 void app_SetupParam_set_defolt();
 
-void app_get_accelerometr_data_LSM6DS3TR();
+void app_get_acc_data_LSM6DS3TR();
 
-void app_get_accelerometr_data_MPU6050();
+void app_get_acc_data_MPU6050();
 
-void app_accelerometr_data_filter();
+void app_acc_data_filter();
+
+void app_acc_set_scale_SM6DS3TR(uint16_t value);
+
+void app_acc_set_scale_MPU6050(uint16_t value);
+
+void app_acc_set_freq_SM6DS3TR(uint16_t value);
+
+void app_acc_set_freq_MPU6050(uint16_t value);
 
 void app_flash_load();
 

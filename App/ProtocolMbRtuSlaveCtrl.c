@@ -34,12 +34,20 @@ enum mdb_table_setup
   mdb_table_setup_LSM6DS3TR_acc_scale,
   mdb_table_setup_MPU6050_freq,
   mdb_table_setup_LSM6DS3TR_freq,
-  mdb_table_setup_order_1 = 104,
-  mdb_table_setup_order_8 = 109,
-  mdb_table_setup_filterN_1 = 110,
-  mdb_table_setup_filterN_8 = 115
+  mdb_table_setup_order_0,
+  mdb_table_setup_order_1,
+  mdb_table_setup_order_2,
+  mdb_table_setup_order_3,
+  mdb_table_setup_order_4,
+  mdb_table_setup_order_5,
+  mdb_table_setup_filterN_0,
+  mdb_table_setup_filterN_1,
+  mdb_table_setup_filterN_2,
+  mdb_table_setup_filterN_3,
+  mdb_table_setup_filterN_4,
+  mdb_table_setup_filterN_5
 };
-#define MDB_TABLE_SETUP_COUNT (mdb_table_setup_filterN_8 - mdb_table_setup_MPU6050_acc_scale + 1)
+#define MDB_TABLE_SETUP_COUNT (mdb_table_setup_filterN_5 - mdb_table_setup_MPU6050_acc_scale + 1)
 uint16_t mdb_table_setup_buf[MDB_TABLE_SETUP_COUNT];
 ModbusSS_table_t mdb_table_setup = {
     .buf = (uint8_t *)mdb_table_setup_buf,
@@ -122,16 +130,19 @@ void protocolMbRtuSlaveCtrl_update_tables()
   ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_MPU6050_freq,        App.SetupParam.MPU6050_freq);
   ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_LSM6DS3TR_freq,      App.SetupParam.LSM6DS3TR_freq);
 
-  for (uint8_t i = mdb_table_setup_order_1, j = 0; i <= mdb_table_setup_order_8; i++, j++)
-  {
-    ModbusSS_SetWord(&mdb_table_setup, i, App.SetupParam.order[j]);
-  }
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_order_0,             App.SetupParam.order[0]);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_order_1,             App.SetupParam.order[1]);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_order_2,             App.SetupParam.order[2]);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_order_3,             App.SetupParam.order[3]);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_order_4,             App.SetupParam.order[4]);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_order_5,             App.SetupParam.order[5]);
 
-  for (uint8_t i = mdb_table_setup_filterN_1, j = 0; i <= mdb_table_setup_filterN_8; i++, j++)
-  {
-    ModbusSS_SetWord(&mdb_table_setup, i, App.SetupParam.filterN[j]);
-  }
-  
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_filterN_0,           App.SetupParam.filterN[0]);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_filterN_1,           App.SetupParam.filterN[1]);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_filterN_2,           App.SetupParam.filterN[2]);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_filterN_3,           App.SetupParam.filterN[3]);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_filterN_4,           App.SetupParam.filterN[4]);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_filterN_5,           App.SetupParam.filterN[5]);
   return;
 }
 //------------------------ REGULAR FCN END------------------------
@@ -147,6 +158,7 @@ __weak void protocolMbRtuSlaveCtrl_callback_H_WRITE(ModbusSS_table_t *table, uin
   // float kMul = 0.001f;
   // float value = 0.0f;
   // uint8_t idx = 0;
+  uint16_t value = 0;
   asm("NOP");
 
   if (table == &mdb_table_control) // Диапазон PROGRAM
@@ -159,19 +171,76 @@ __weak void protocolMbRtuSlaveCtrl_callback_H_WRITE(ModbusSS_table_t *table, uin
       {
       case protocol_cmd_save_param:
         app_flash_save();
+        app_system_reset();
         break;
       case protocol_cmd_reset:
         app_system_reset();
         break;
       case protocol_cmd_param_set_defolt:
         app_SetupParam_set_defolt();
-        app_system_reset();
         break;
       default:
         break;
       }
     default:
       break;
+    }
+  }
+  else if (table == &mdb_table_setup)
+  {
+    value = ModbusSS_GetWord(&mdb_table_setup, reg);
+    switch (reg)
+    {
+      case mdb_table_setup_MPU6050_acc_scale:
+        app_acc_set_scale_MPU6050(value);
+        break;
+      case mdb_table_setup_LSM6DS3TR_acc_scale:
+        app_acc_set_scale_SM6DS3TR(value);
+        break;
+      case mdb_table_setup_MPU6050_freq:
+        app_acc_set_freq_MPU6050(value);
+        break;
+      case mdb_table_setup_LSM6DS3TR_freq:
+        app_acc_set_freq_SM6DS3TR(value);
+        break;
+      case mdb_table_setup_order_0:
+        App.SetupParam.order[0] = value;
+        break;
+      case mdb_table_setup_order_1:
+        App.SetupParam.order[1] = value;
+        break;
+      case mdb_table_setup_order_2:
+        App.SetupParam.order[2] = value;
+        break;
+      case mdb_table_setup_order_3:
+        App.SetupParam.order[3] = value;
+        break;
+      case mdb_table_setup_order_4:
+        App.SetupParam.order[4] = value;
+        break;
+      case mdb_table_setup_order_5:
+        App.SetupParam.order[5] = value;
+        break;
+      case mdb_table_setup_filterN_0:
+        App.SetupParam.filterN[0] = value;
+        break;
+      case mdb_table_setup_filterN_1:
+        App.SetupParam.filterN[1] = value;
+        break;
+      case mdb_table_setup_filterN_2:
+        App.SetupParam.filterN[2] = value;
+        break;
+      case mdb_table_setup_filterN_3:
+        App.SetupParam.filterN[3] = value;
+        break;
+      case mdb_table_setup_filterN_4:
+        App.SetupParam.filterN[4] = value;
+        break;
+      case mdb_table_setup_filterN_5:
+        App.SetupParam.filterN[5] = value;
+        break;
+      default:
+        break;
     }
   }
 }
