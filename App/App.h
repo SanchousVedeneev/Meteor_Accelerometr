@@ -23,8 +23,8 @@ typedef enum
 
 typedef struct
 {
-    uint8_t MPU6050_acc_scale;
-    uint8_t LSM6DS3TR_acc_scale;
+    uint8_t MPU6050_scale;
+    uint8_t LSM6DS3TR_scale;
 
     uint8_t MPU6050_freq;
     uint8_t LSM6DS3TR_freq;

@@ -12,11 +12,18 @@ void app_main()
     app_SetupParam_init();
     app_acc_filter_init();
 
-    LSM6DS3TR_init_struct();
-    MPU6050_init_struct();
+    HAL_Delay(100);
 
+    LSM6DS3TR_init_struct();
     LSM6DS3TR_config();
+
+    HAL_Delay(100);
+    
+    MPU6050_init_struct();
     MPU6050_config();
+
+    HAL_Delay(100);
+
     protocolMbRtuSlaveCtrl_init(1);
     while (1)
     {
@@ -43,8 +50,8 @@ void app_SetupParam_set_defolt()
     **       8: +-  8g
     **      16: +- 16g
     */
-    App.SetupParam.MPU6050_acc_scale   = 4;
-    App.SetupParam.LSM6DS3TR_acc_scale = 4;
+    App.SetupParam.MPU6050_scale   = 4;
+    App.SetupParam.LSM6DS3TR_scale = 4;
 
     /* @brief information
     ** MPU6050_frequency
@@ -177,11 +184,11 @@ void app_acc_data_filter()
     asm("Nop");
 }
 
-void app_acc_set_scale_SM6DS3TR(uint16_t value)
+void app_acc_set_scale_SM6DS3TR(uint16_t value)\
 {
     if ((value >= 2) || (value < 16))
     {
-        App.SetupParam.LSM6DS3TR_acc_scale = value;
+        App.SetupParam.LSM6DS3TR_scale = value;
     }
     else 
     {
@@ -195,7 +202,7 @@ void app_acc_set_scale_MPU6050(uint16_t value)
 {
     if ((value >= 2) || (value <= 16))
     {
-        App.SetupParam.MPU6050_acc_scale = value;
+        App.SetupParam.MPU6050_scale = value;
     }
     else 
     {

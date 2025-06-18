@@ -60,22 +60,22 @@ void LSM6DS3TR_init_struct()
     LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.BW0_XL      = BIT_SET;
     LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.LPF1_BW_SEL = BIT_RESET;
 
-    if (App.SetupParam.LSM6DS3TR_acc_scale == 2)
+    if (App.SetupParam.LSM6DS3TR_scale == 2)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL0 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL1 = BIT_RESET;
     }
-    else if (App.SetupParam.LSM6DS3TR_acc_scale == 4)
+    else if (App.SetupParam.LSM6DS3TR_scale == 4)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL0 = BIT_RESET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL1 = BIT_SET;
     }
-    else if (App.SetupParam.LSM6DS3TR_acc_scale == 8)
+    else if (App.SetupParam.LSM6DS3TR_scale == 8)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL0 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL1 = BIT_SET;
     }
-    else if (App.SetupParam.LSM6DS3TR_acc_scale == 16)
+    else if (App.SetupParam.LSM6DS3TR_scale == 16)
     {
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL0 = BIT_SET;
         LSM6DS3TR.reg_conf.CTRL1_XL.reg_data.bits.FS_XL1 = BIT_RESET;        
@@ -183,19 +183,19 @@ void LSM6DS3TR_init_struct()
     asm("Nop");
 
     //---------------------- accelerometr_scale_k ----------------------//
-    if (App.SetupParam.LSM6DS3TR_acc_scale == 2)
+    if (App.SetupParam.LSM6DS3TR_scale == 2)
     {
         LSM6DS3TR.accelerometr_scale_k = 16.384f;
     }
-    else if (App.SetupParam.LSM6DS3TR_acc_scale == 4)
+    else if (App.SetupParam.LSM6DS3TR_scale == 4)
     {
         LSM6DS3TR.accelerometr_scale_k = 8.192f;
     }
-    else if (App.SetupParam.LSM6DS3TR_acc_scale == 8)
+    else if (App.SetupParam.LSM6DS3TR_scale == 8)
     {
         LSM6DS3TR.accelerometr_scale_k = 4.096f;
     }
-    else if (App.SetupParam.LSM6DS3TR_acc_scale == 16)
+    else if (App.SetupParam.LSM6DS3TR_scale == 16)
     {
         LSM6DS3TR.accelerometr_scale_k = 2.048f;
     }

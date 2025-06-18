@@ -8,7 +8,6 @@ uint8_t modbusBufRxTxRtu485[MODBUS_SS_BUF_CNT];
 //--------------------  PROTOCOL ---------------------//
 //---1
 #define MDB_TABLE_ACC_REG_NO (1)
-
 enum mdb_table_acc
 {
   mdb_table_acc_LSM6DS3TR_aX = MDB_TABLE_ACC_REG_NO,
@@ -30,8 +29,8 @@ ModbusSS_table_t mdb_table_acc = {
 #define MDB_TABLE_SETUP_REG_NO (100)
 enum mdb_table_setup
 {
-  mdb_table_setup_MPU6050_acc_scale = MDB_TABLE_SETUP_REG_NO,
-  mdb_table_setup_LSM6DS3TR_acc_scale,
+  mdb_table_setup_MPU6050_scale = MDB_TABLE_SETUP_REG_NO,
+  mdb_table_setup_LSM6DS3TR_scale,
   mdb_table_setup_MPU6050_freq,
   mdb_table_setup_LSM6DS3TR_freq,
   mdb_table_setup_order_0,
@@ -47,7 +46,7 @@ enum mdb_table_setup
   mdb_table_setup_filterN_4,
   mdb_table_setup_filterN_5
 };
-#define MDB_TABLE_SETUP_COUNT (mdb_table_setup_filterN_5 - mdb_table_setup_MPU6050_acc_scale + 1)
+#define MDB_TABLE_SETUP_COUNT (mdb_table_setup_filterN_5 - mdb_table_setup_MPU6050_scale + 1)
 uint16_t mdb_table_setup_buf[MDB_TABLE_SETUP_COUNT];
 ModbusSS_table_t mdb_table_setup = {
     .buf = (uint8_t *)mdb_table_setup_buf,
@@ -69,8 +68,6 @@ ModbusSS_table_t mdb_table_control = {
     .regNo = MDB_TABLE_CONTROL_NO,
     .type = ModbusSS_Holding};
 
-
-  
 //--------------------  PROTOCOL END---------------------//
 
 //--------------------  TABLES ARRAY ---------------------//
@@ -125,8 +122,8 @@ void protocolMbRtuSlaveCtrl_update_tables()
   ModbusSS_SetWord(&mdb_table_acc, mdb_table_acc_MPU6050_aZ,   App.acc_data[MPU6050_aZ]);
 
   //100__
-  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_MPU6050_acc_scale,   App.SetupParam.MPU6050_acc_scale);
-  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_LSM6DS3TR_acc_scale, App.SetupParam.LSM6DS3TR_acc_scale);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_MPU6050_scale,   App.SetupParam.MPU6050_scale);
+  ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_LSM6DS3TR_scale, App.SetupParam.LSM6DS3TR_scale);
   ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_MPU6050_freq,        App.SetupParam.MPU6050_freq);
   ModbusSS_SetWord(&mdb_table_setup, mdb_table_setup_LSM6DS3TR_freq,      App.SetupParam.LSM6DS3TR_freq);
 
@@ -178,6 +175,8 @@ __weak void protocolMbRtuSlaveCtrl_callback_H_WRITE(ModbusSS_table_t *table, uin
         break;
       case protocol_cmd_param_set_defolt:
         app_SetupParam_set_defolt();
+        app_flash_save();
+        app_system_reset();
         break;
       default:
         break;
@@ -191,10 +190,10 @@ __weak void protocolMbRtuSlaveCtrl_callback_H_WRITE(ModbusSS_table_t *table, uin
     value = ModbusSS_GetWord(&mdb_table_setup, reg);
     switch (reg)
     {
-      case mdb_table_setup_MPU6050_acc_scale:
+      case mdb_table_setup_MPU6050_scale:
         app_acc_set_scale_MPU6050(value);
         break;
-      case mdb_table_setup_LSM6DS3TR_acc_scale:
+      case mdb_table_setup_LSM6DS3TR_scale:
         app_acc_set_scale_SM6DS3TR(value);
         break;
       case mdb_table_setup_MPU6050_freq:
