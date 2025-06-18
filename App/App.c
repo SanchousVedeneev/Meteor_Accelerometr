@@ -184,7 +184,7 @@ void app_acc_data_filter()
     asm("Nop");
 }
 
-void app_acc_set_scale_SM6DS3TR(uint16_t value)\
+void app_acc_set_scale_SM6DS3TR(uint16_t value)
 {
     if ((value >= 2) || (value < 16))
     {
